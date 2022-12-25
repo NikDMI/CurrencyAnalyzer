@@ -17,7 +17,7 @@ namespace Server.Servers
             switch (serverKind)
             {
                 case ServerKind.HTTP:
-                    return null;
+                    return new HttpServer();
 
                 default:
                     throw new ArgumentException("Required kind of server is not supported");

@@ -1,5 +1,6 @@
 ﻿using System;
 using Server.Servers;
+using ConfigLibrary;
 
 namespace Server
 {
@@ -10,21 +11,41 @@ namespace Server
     {
         public static void Main(String[] args)
         {
-            //According to configs create server
-
+            //Get configs of the application
+            IConfig configs = ConfigFactory.GetConfig(ConfigFactory.ConfigType.ASSEMBLY_MEMORY);
             try
             {
-                _server = ServerFactory.CreateServer(ServerFactory.ServerKind.HTTP);
-                _server.StartServer("127.0.0.1", 1000);
+                //Create server object according to communication protocol
+                _server = CreateServer(configs);
+                //Bind server to the config address and start it
+                string serverDomainName = configs.GetServerDomainName();
+                int serverPort = configs.GetServerPort();
+                _server.StartServer(serverDomainName, serverPort);
+                Console.WriteLine("Server was started at " + serverDomainName + ":" + serverPort + "\nPress any key to stop the server...");
             }
             catch (Exception e)
             {
                 Console.WriteLine("Can't start the server. Error message: " + e.Message);
             }
-            Console.WriteLine("Server starting at ../ \n Press any key to stop the server...");
             Console.Read();
-
+            _server.StopServer();
+            Console.WriteLine("Server was stopped");
         }
+
+
+        private static IServer CreateServer(IConfig configs)
+        {
+            var communicationProtocol = configs.GetNetworkProtocol();
+            switch (communicationProtocol)
+            {
+                case IConfig.ApplicationProtocol.HTTP:
+                    return ServerFactory.CreateServer(ServerFactory.ServerKind.HTTP);
+
+                default:
+                    throw new Exception("Not supported comunication protocol");
+            }
+        }
+
 
 
         private static IServer _server;

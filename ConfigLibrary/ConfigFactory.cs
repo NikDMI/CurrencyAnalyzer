@@ -5,10 +5,16 @@ namespace ConfigLibrary
 {
     public class ConfigFactory
     {
+        //Storage type of configurations
         public enum ConfigType { ASSEMBLY_MEMORY, XML };
 
 
-        public IConfig GetConfig(ConfigType configType)
+        /// 
+        /// Returns config object according to the type
+        /// 
+        /// <param name="configType">Storage config type</param>
+        /// <returns></returns>
+        public static IConfig GetConfig(ConfigType configType)
         {
             switch (configType)
             {
@@ -24,6 +30,9 @@ namespace ConfigLibrary
         }
 
 
+        /// 
+        /// Type constructor (to initialize singelton objects)
+        /// 
         static ConfigFactory()
         {
             _memoryConfig = new MemoryConfig();

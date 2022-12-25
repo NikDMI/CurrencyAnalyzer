@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Server.Servers
 {
@@ -12,18 +10,12 @@ namespace Server.Servers
         /// <summary>
         /// Starts the server according to config address
         /// </summary>
-        void StartServer(string domainName, int portNumber)
-        {
-
-        }
+        void StartServer(string domainName, int portNumber);
 
 
         /// <summary>
         /// Stops the server
         /// </summary>
-        void StopServer()
-        {
-
-        }
+        void StopServer();
     }
 }
