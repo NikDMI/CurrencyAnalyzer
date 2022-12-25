@@ -56,6 +56,7 @@ namespace Server.Servers
                         _serverAwaitEvent.Set();    //signals server thread
                     }
                 });
+
                 _serverAwaitEvent.WaitOne();    //Sleep until client doesn't send a requirest or admin can't stop the server
                 //Admin stoped the server
                 if (_cancellationServerToken.IsCancellationRequested)
@@ -64,7 +65,18 @@ namespace Server.Servers
                 }
                 //Get user requirest
                 var httpContext = httpContextTask.Result;
+                ProcessClientRequest(httpContext);
             }
+        }
+
+
+        /// 
+        /// Process client requirest
+        /// 
+        /// <param name="httpContext"></param>
+        private void ProcessClientRequest(HttpListenerContext httpContext)
+        {
+
         }
 
 
