@@ -14,17 +14,16 @@ namespace ConfigLibrary.Bean
 
 
         //Get serialized bytes of some structure
-        public byte[] SerializeData()
+        public List<byte> SerializeData()
         {
             return BinaryConverter.SerializeData<CurrencyInfo>(this);
         }
 
 
         //Fill structure from serialized bytes
-        public void DeserializeData(byte[] data)
+        public void DeserializeData(List<byte> data)
         {
-            List<byte> binaryData = new List<byte>(data);
-            BinaryConverter.DeserializeData<CurrencyInfo>(binaryData, ref this);
+            BinaryConverter.DeserializeData<CurrencyInfo>(data, ref this);
         }
     }
 }

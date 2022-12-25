@@ -30,7 +30,7 @@ namespace ConfigLibrary.Bean
 
 
         //Serialize all public fields and properties of some type
-        internal static byte[] SerializeData<T>(T data)
+        internal static List<byte> SerializeData<T>(T data)
         {
             List<byte> binaryData = new List<byte>();
             Type dataType = typeof(T);
@@ -56,7 +56,7 @@ namespace ConfigLibrary.Bean
                     binaryData.AddRange(serializeFunction(publicProperty.GetValue(data)));
                 }
             }
-            return binaryData.ToArray();
+            return binaryData;
         }
 
 

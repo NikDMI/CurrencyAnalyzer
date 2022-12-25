@@ -8,10 +8,11 @@ namespace ConfigLibrary.Bean
     public interface IConvertable
     {
         //Get serialized bytes of some structure
-        public byte[] SerializeData();
+        public List<byte> SerializeData();
 
 
         //Fill structure from serialized bytes
-        public void DeserializeData(byte[] data);
+        //After reading structure will be removed from the List
+        public void DeserializeData(List<byte> data);
     }
 }

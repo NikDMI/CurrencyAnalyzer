@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Threading;
 using System.Net;
+using Server.RequestController;
 
 namespace Server.Servers
 {
@@ -65,7 +67,8 @@ namespace Server.Servers
                 }
                 //Get user requirest
                 var httpContext = httpContextTask.Result;
-                ProcessClientRequest(httpContext);
+                Task.Run(() => this.ProcessClientRequest(httpContext));
+                //ProcessClientRequest(httpContext);
             }
         }
 
@@ -76,7 +79,21 @@ namespace Server.Servers
         /// <param name="httpContext"></param>
         private void ProcessClientRequest(HttpListenerContext httpContext)
         {
-
+            //Get data from the user request
+            var requestStream = httpContext.Request.InputStream;
+            var dataSize = httpContext.Request.ContentLength64;
+            byte[] requestData = new byte[dataSize];
+            requestStream.Read(requestData, 0, (int)dataSize);
+            List<byte> responseData = Server.RequestController.RequestController.ProcessRequest(requestData);
+            //Send response
+            httpContext.Response.KeepAlive = false;
+            if (responseData.Count > 0)
+            {
+                httpContext.Response.ContentLength64 = responseData.Count;
+                httpContext.Response.OutputStream.Write(responseData.ToArray(), 0, responseData.Count);
+                httpContext.Response.OutputStream.Close();
+            }
+            httpContext.Response.Close();
         }
 
 
