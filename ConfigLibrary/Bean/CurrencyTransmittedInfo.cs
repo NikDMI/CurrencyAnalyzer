@@ -4,7 +4,7 @@ using System.Collections.Generic;
 namespace ConfigLibrary.Bean
 {
     //Object of this class can be transmitted throught the network
-    public struct CurrencyInfo : IConvertable
+    public struct CurrencyTransmittedInfo : IConvertable
     {
         public DateTime Date { get; set; }  //date of the rate
 
@@ -16,14 +16,14 @@ namespace ConfigLibrary.Bean
         //Get serialized bytes of some structure
         public List<byte> SerializeData()
         {
-            return BinaryConverter.SerializeData<CurrencyInfo>(this);
+            return BinaryConverter.SerializeData<CurrencyTransmittedInfo>(this);
         }
 
 
         //Fill structure from serialized bytes
         public void DeserializeData(List<byte> data)
         {
-            BinaryConverter.DeserializeData<CurrencyInfo>(data, ref this);
+            BinaryConverter.DeserializeData<CurrencyTransmittedInfo>(data, ref this);
         }
     }
 }

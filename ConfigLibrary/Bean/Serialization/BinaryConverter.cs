@@ -38,6 +38,10 @@ namespace ConfigLibrary.Bean
             //Serialize fields
             foreach (var publicField in dataType.GetFields())
             {
+                if (publicField.FieldType.IsDefined(typeof(NonSerializableAttribute)))
+                {
+                    continue;
+                }
                 if (!_registeredSerializers.TryGetValue(publicField.FieldType, out serializeFunction))
                 {
                     throw new Exception("Type" + publicField.FieldType.ToString() + "can not be serialized");
@@ -47,7 +51,7 @@ namespace ConfigLibrary.Bean
             //Serialize properties
             foreach (var publicProperty in dataType.GetProperties())
             {
-                if (publicProperty.CanRead)
+                if (publicProperty.CanRead && !publicProperty.PropertyType.IsDefined(typeof(NonSerializableAttribute)))
                 {
                     if (!_registeredSerializers.TryGetValue(publicProperty.PropertyType, out serializeFunction))
                     {
@@ -68,6 +72,10 @@ namespace ConfigLibrary.Bean
             //Serialize fields
             foreach (var publicField in dataType.GetFields())
             {
+                if (publicField.FieldType.IsDefined(typeof(NonSerializableAttribute)))
+                {
+                    continue;
+                }
                 if (!_registeredDeserializers.TryGetValue(publicField.FieldType, out deserializeFunction))
                 {
                     throw new Exception("Type" + publicField.FieldType.ToString() + "can not be deserialized");
@@ -77,7 +85,7 @@ namespace ConfigLibrary.Bean
             //Serialize properties
             foreach (var publicProperty in dataType.GetProperties())
             {
-                if (publicProperty.CanWrite)
+                if (publicProperty.CanWrite && !publicProperty.PropertyType.IsDefined(typeof(NonSerializableAttribute)))
                 {
                     if (!_registeredDeserializers.TryGetValue(publicProperty.PropertyType, out deserializeFunction))
                     {
@@ -90,7 +98,7 @@ namespace ConfigLibrary.Bean
 
 
         //Serialize long value
-        private static List<byte> SerializeLongValue(object data)
+        internal static List<byte> SerializeLongValue(object data)
         {
             long dataValue = (long)data;
             List<byte> dataArray = new List<byte>(BitConverter.GetBytes(dataValue));
@@ -104,7 +112,7 @@ namespace ConfigLibrary.Bean
 
         //Deserialize long value
         //Remove data from the list (ref pointer)
-        private static object DeserializeLongValue(List<byte> binaryData)
+        internal static object DeserializeLongValue(List<byte> binaryData)
         {
             List<byte> dataArray = binaryData.GetRange(0, sizeof(long));
             if (!BitConverter.IsLittleEndian)
@@ -117,7 +125,7 @@ namespace ConfigLibrary.Bean
 
 
         //Serialize int value
-        private static List<byte> SerializeIntValue(object data)
+        internal static List<byte> SerializeIntValue(object data)
         {
             int dataValue = (int)data;
             List<byte> dataArray = new List<byte>(BitConverter.GetBytes(dataValue));
@@ -131,7 +139,7 @@ namespace ConfigLibrary.Bean
 
         //Deserialize int value
         //Remove data from the list (ref pointer)
-        private static object DeserializeIntValue(List<byte> binaryData)
+        internal static object DeserializeIntValue(List<byte> binaryData)
         {
             List<byte> dataArray = binaryData.GetRange(0, sizeof(int));
             if (!BitConverter.IsLittleEndian)

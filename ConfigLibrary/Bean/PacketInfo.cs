@@ -13,14 +13,15 @@ namespace ConfigLibrary.Bean
         {
             get
             {
-                return _packetType;
+                return (int)_packetType;
             }
 
             set
             {
-                _packetType = value;
+                _packetType = (PacketType)value;
             }
         }
+
 
         //Get serialized bytes of some structure
         public List<byte> SerializeData()
@@ -36,6 +37,6 @@ namespace ConfigLibrary.Bean
         }
 
 
-        private int _packetType;
+        private PacketType _packetType;
     }
 }

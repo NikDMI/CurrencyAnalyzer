@@ -2,6 +2,8 @@
 using Server.Servers;
 using ConfigLibrary;
 
+using Server.Services;
+
 namespace Server
 {
     /// <summary>
@@ -11,6 +13,9 @@ namespace Server
     {
         public static void Main(String[] args)
         {
+            ICurrencyService s = CurrencyServiceFactory.GetCurrencyService(ConfigLibrary.Bean.CurrencyType.BYN);
+            s.GetRates(new DateTime(2022, 11, 20), new DateTime(2022, 11, 30), ConfigLibrary.Bean.CurrencyType.EUR);
+            
             //Get configs of the application
             IConfig configs = ConfigFactory.GetConfig(ConfigFactory.ConfigType.ASSEMBLY_MEMORY);
             try
