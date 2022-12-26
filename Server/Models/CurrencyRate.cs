@@ -11,9 +11,9 @@ namespace Server.Models
 
         public CurrencyType CurrencyTypeTo { get; set; } //To which type of currency make rate (RUB, USD, ...)
 
-        public int CurrencyCountFrom { get; set; }  //
+        public double CurrencyCountFrom { get; set; }  //
 
-        public int CurrencyAmountTo { get; set; }  //
+        public double CurrencyAmountTo { get; set; }  //
 
         public DateTime RateDate { get; set; }
 

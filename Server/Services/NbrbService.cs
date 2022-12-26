@@ -46,11 +46,25 @@ namespace Server.Services
             {
                 throw new ArgumentException("Nbrb not supported " + currencyType.ToString() + " currency");
             }
-            //Requere rates
+            //Requere rates (can throw)
+            List<RateShort> requestRates = RequareRates(timeFrom, timeTo, currencyNbrb);
+            List<CurrencyRate> userRates = new List<CurrencyRate>(requestRates.Count);
+            int currencyCountFrom = currencyType == CurrencyType.RUB ? 100 : 1;
+            requestRates.ForEach(rate => userRates.Add(new CurrencyRate { CurrencyTypeFrom = CurrencyType.BYN, CurrencyTypeTo = currencyType,
+                CurrencyAmountTo = (double)rate.Cur_OfficialRate, CurrencyCountFrom = currencyCountFrom, RateDate = rate.Date }));
+
+            return userRates;
+        }
+
+
+        //Splice time period into suitable parts for NBRB API
+        private List<RateShort> RequareRates(DateTime timeFrom, DateTime timeTo, CurrencyNbrb currencyNbrb)
+        {
+            List<RateShort> currencyRates = new List<RateShort>();
             var rateTimespan = timeTo - timeFrom;   //How mush days user want get
             while (rateTimespan > TimeSpan.Zero)
             {
-                if (rateTimespan > AVAILABLE_DAYS_PERIOD)
+                if (rateTimespan > AVAILABLE_DAYS_PERIOD)   //If amount of days larger than API can process
                 {
                     timeTo = timeFrom + AVAILABLE_DAYS_PERIOD;
                     rateTimespan -= AVAILABLE_DAYS_PERIOD;
@@ -60,13 +74,15 @@ namespace Server.Services
                     timeTo = timeFrom + rateTimespan;
                     rateTimespan = TimeSpan.Zero;
                 }
-                GetDynamicRates(timeFrom, timeTo, currencyNbrb);
+                //Add new portion of rates
+                currencyRates.AddRange(GetDynamicRates(timeFrom, timeTo, currencyNbrb));
                 timeFrom = timeTo;
             }
-            return null;
+            return currencyRates;
         }
 
 
+        //Try get dynamic rates from one API call or get each rate by single call
         private List<RateShort> GetDynamicRates(DateTime fromDay, DateTime toDay, CurrencyNbrb currency)
         {
             //Require all available currencies

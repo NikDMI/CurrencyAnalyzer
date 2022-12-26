@@ -2,7 +2,7 @@
 using Server.Servers;
 using ConfigLibrary;
 
-using Server.Services;
+using Server.Cache;
 
 namespace Server
 {
@@ -13,9 +13,14 @@ namespace Server
     {
         public static void Main(String[] args)
         {
-            ICurrencyService s = CurrencyServiceFactory.GetCurrencyService(ConfigLibrary.Bean.CurrencyType.BYN);
-            s.GetRates(new DateTime(2022, 11, 20), new DateTime(2022, 11, 30), ConfigLibrary.Bean.CurrencyType.EUR);
-            
+            CurrencyCache c = new CurrencyCache();
+            var res = c.GetAvailableCurrencyRates(ConfigLibrary.Bean.CurrencyType.BYN, ConfigLibrary.Bean.CurrencyType.USD, new DateTime(2022, 11, 1),
+                new DateTime(2022, 11, 5), 10);
+            res = c.GetAvailableCurrencyRates(ConfigLibrary.Bean.CurrencyType.BYN, ConfigLibrary.Bean.CurrencyType.USD, new DateTime(2022, 11, 10),
+                new DateTime(2022, 11, 15), 10);
+            res = c.GetAvailableCurrencyRates(ConfigLibrary.Bean.CurrencyType.BYN, ConfigLibrary.Bean.CurrencyType.USD, new DateTime(2022, 11, 1),
+                new DateTime(2022, 11, 15), 10);
+
             //Get configs of the application
             IConfig configs = ConfigFactory.GetConfig(ConfigFactory.ConfigType.ASSEMBLY_MEMORY);
             try
