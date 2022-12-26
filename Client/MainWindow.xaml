@@ -7,8 +7,53 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Grid>
-        <Button Content="Button" HorizontalAlignment="Left" Margin="208,217,0,0" VerticalAlignment="Top" Height="93" Width="242"
-                Click="Button_Click"/>
-
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Grid Grid.ColumnSpan="20">
+                <TextBox HorizontalAlignment="Left" Margin="29,0,0,0" TextWrapping="Wrap" VerticalAlignment="Center" Width="113" Height="23" ToolTip="Начальная дата"/>
+                <Label Content="-&#xD;&#xA;" HorizontalAlignment="Left" Margin="147,0,0,0" VerticalAlignment="Center" Height="23" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Width="20" RenderTransformOrigin="0.6,0.297"/>
+                <TextBox HorizontalAlignment="Left" Margin="172,0,0,0" Text="TextBox" TextWrapping="Wrap" VerticalAlignment="Center" Width="113" Height="23"/>
+                <ComboBox HorizontalAlignment="Left" Margin="377,0,0,0" VerticalAlignment="Center" Width="120">
+                    <ListBoxItem Content="USD"/>
+                    <ListBoxItem Content="EUR"/>
+                    <ListBoxItem Content="RUB"/>
+                </ComboBox>
+                <Label Content="Валюта:" HorizontalAlignment="Left" Margin="307,0,0,0" VerticalAlignment="Center" Height="23" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Width="51" RenderTransformOrigin="0.6,0.297"/>
+                <Button Content="Получить" HorizontalAlignment="Left" Margin="532,0,0,0" VerticalAlignment="Center" Width="72"/>
+            </Grid>
+        </Grid>
     </Grid>
 </Window>

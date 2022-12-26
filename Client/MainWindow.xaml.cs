@@ -35,5 +35,10 @@ namespace Client
 
 
         private ViewModel _viewModel;
+
+        private void ComboBox_SelectionChanged()
+        {
+
+        }
     }
 }

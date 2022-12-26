@@ -5,6 +5,7 @@ using Server.Models;
 using Server.Services;
 using System.Linq;
 using System.Collections.Concurrent;
+using Server.Cache.CacheUploader;
 
 namespace Server.Cache
 {
@@ -27,6 +28,12 @@ namespace Server.Cache
                 }
                 _currenciesRates.Add(currency, innerDictionary);
             }
+            //Load cache from file
+            _cacheUploader = CacheUploaderFactory.GetCacheUploader(CacheUploaderFactory.CacheUploadersType.FILE_JSON);
+            List<CurrencyRate> rates = new List<CurrencyRate>();
+            rates.Add(new CurrencyRate { CurrencyAmountTo = 10, CurrencyCountFrom = 200.234234, CurrencyTypeFrom = CurrencyType.BYN, CurrencyTypeTo = CurrencyType.USD, RateDate = new DateTime(2022, 10, 23) });
+            rates.Add(new CurrencyRate { CurrencyAmountTo = 20, CurrencyCountFrom = 100.1314, CurrencyTypeFrom = CurrencyType.BYN, CurrencyTypeTo = CurrencyType.USD, RateDate = new DateTime(2022, 10, 23) });
+            _cacheUploader.AppendCurrencyRates(rates.GetEnumerator());
             //Initialize services
             _currencyServices = new Dictionary<CurrencyType, ICurrencyService>();
             _currencyServices.Add(CurrencyType.BYN, CurrencyServiceFactory.GetCurrencyService(CurrencyType.BYN));
@@ -102,6 +109,7 @@ namespace Server.Cache
                         neededRecords -= savedRecords;
                     }
                 }
+                //Add loaded rates to list and cache
                 requeredRates.AddRange(newCurrencyRates);
                 newCurrencyRates.ForEach(rate => currencyRates.Add(rate));//переделать с учетом вариата, когда два потока добавляют одни и те же записи
             }
@@ -113,6 +121,8 @@ namespace Server.Cache
 
         //Map of services to get rates of assosiated currency
         private Dictionary<CurrencyType, ICurrencyService> _currencyServices;
+
+        private ICacheUploader _cacheUploader;
 
     }
 }

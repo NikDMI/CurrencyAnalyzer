@@ -14,9 +14,9 @@ namespace Client.Clients
 
         public void SendTest()
         {
-            var task = _httpClient.GetByteArrayAsync(_serverUri);
-            task.Wait();
-            var res = task.Result;
+            //var task = _httpClient.GetByteArrayAsync(_serverUri);
+            //task.Wait();
+            //var res = task.Result;
         }
 
         private string _serverUri;
