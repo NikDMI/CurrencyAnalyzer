@@ -28,10 +28,24 @@ namespace Server.RequestController
         }
 
 
+        //This class is used to init all server work
+        public static void InitializeWork()
+        {
+            _cache = new CurrencyCache();
+        }
+
+
         //This class is used to finish all server work
         public static void FinalizeWork()
         {
-            _cache.Dispose();
+            try
+            {
+                _cache.Dispose();
+            }
+            catch (Exception e)
+            {
+
+            }
         }
 
 
@@ -92,6 +106,6 @@ namespace Server.RequestController
         }
 
 
-        private static CurrencyCache _cache = new CurrencyCache();
+        private static CurrencyCache _cache;
     }
 }

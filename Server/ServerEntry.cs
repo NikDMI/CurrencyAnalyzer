@@ -17,6 +17,7 @@ namespace Server
             IConfig configs = ConfigFactory.GetConfig(ConfigFactory.ConfigType.ASSEMBLY_MEMORY);
             try
             {
+                RequestController.RequestController.InitializeWork();
                 //Create server object according to communication protocol
                 _server = CreateServer(configs);
                 //Bind server to the config address and start it
@@ -28,6 +29,7 @@ namespace Server
             catch (Exception e)
             {
                 Console.WriteLine("Can't start the server. Error message: " + e.Message);
+                Environment.Exit(-1);
             }
             Console.Read();
             _server.StopServer();
