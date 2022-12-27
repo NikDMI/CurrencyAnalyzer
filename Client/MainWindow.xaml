@@ -24,7 +24,8 @@
                     <ComboBoxItem Content="RUB"/>
 
                 </ComboBox>
-                <Button Content="Получить" Margin="10,10,0,10" Padding="10,1,10,1" Click="SendRequestButton"/>
+                <Button Content="Получить" Margin="10,10,0,10" Padding="10,1,10,1" Click="SendRequestButton"
+                        x:Name="_requestButton"/>
             </StackPanel>
 
 

@@ -46,6 +46,30 @@ namespace Client
         }
 
 
+        //Show user, that requirest is processing
+        internal void StartProcessRequest()
+        {
+            _requestButton.Dispatcher.Invoke(System.Windows.Threading.DispatcherPriority.Normal,
+                    new Action(
+                        delegate ()
+                        {
+                            _requestButton.IsEnabled = false;
+                        }));
+        }
+
+
+        //Called at the end of request
+        internal void StopProcessRequest()
+        {
+            _requestButton.Dispatcher.Invoke(System.Windows.Threading.DispatcherPriority.Normal,
+                    new Action(
+                        delegate ()
+                        {
+                            _requestButton.IsEnabled = true;
+                        }));
+        }
+
+
         //Chech date validation
         private bool IsValidDateFormat(string format)
         {
