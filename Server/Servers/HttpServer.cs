@@ -58,8 +58,15 @@ namespace Server.Servers
                         _serverAwaitEvent.Set();    //signals server thread to get next context
                     }
                     //Get user requirest
-                    var httpContext = httpContextTask.Result;
-                    ProcessClientRequest(httpContext);  //Process request asyncronious
+                    try //this block try if admin close the server and aggregateException occurs
+                    {
+                        var httpContext = httpContextTask.Result;
+                        ProcessClientRequest(httpContext);  //Process request asyncronious
+                    }
+                    catch (Exception e)
+                    {
+
+                    }
                 });
 
                 _serverAwaitEvent.WaitOne();    //Sleep until client doesn't send a requirest or admin can't stop the server

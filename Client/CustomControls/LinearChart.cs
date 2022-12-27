@@ -20,15 +20,6 @@ namespace Client.CustomControls
         protected override void OnRender(DrawingContext drawingContext)
         {
             base.OnRender(drawingContext);
-            _currentRates.Add(new Rate { Value = 0.5,  Date = new DateTime (2022, 11, 10) });
-            _currentRates.Add(new Rate { Value = 1, Date = new DateTime(2022, 11, 13) });
-            _currentRates.Add(new Rate { Value = 0.3, Date = new DateTime(2022, 11, 25) });
-            _currentRates.Add(new Rate { Value = 0.5, Date = new DateTime(2022, 11, 27) });
-            _currentRates.Add(new Rate { Value = 1, Date = new DateTime(2022, 11, 28) });
-            _currentRates.Add(new Rate { Value = 0.3, Date = new DateTime(2022, 11, 29) });
-            _currentRates.Add(new Rate { Value = 0.5, Date = new DateTime(2022, 12, 10) });
-            _currentRates.Add(new Rate { Value = 1, Date = new DateTime(2022, 12, 13) });
-            _currentRates.Add(new Rate { Value = 0.3, Date = new DateTime(2022, 12, 25) });
 
             double h = (double)this.Parent.GetValue(Canvas.HeightProperty);
             double w = (double)this.Parent.GetValue(Canvas.WidthProperty);
@@ -149,7 +140,7 @@ namespace Client.CustomControls
 
         private const int Y_AXIS_INTERVALS = 10;    //how much intervals in currency value
 
-        private const int TEXT_AXIS_SPACE = 35; //how much pixels to text
+        private const int TEXT_AXIS_SPACE = 50; //how much pixels to text
 
         private const int TEXT_STRIKE_WIDTH = 5; //width of the strike at axis
 

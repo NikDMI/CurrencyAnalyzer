@@ -17,7 +17,6 @@ namespace Server.Models
 
         public DateTime RateDate { get; set; }
 
-        //* All currencies, that have coins (BYN, RUB, USD) have rate x100 *
 
     }
 }

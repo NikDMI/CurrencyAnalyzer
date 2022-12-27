@@ -14,6 +14,7 @@ namespace ConfigLibrary.Bean
             //Register serializers
             _registeredSerializers.Add(typeof(int), SerializeIntValue);
             _registeredSerializers.Add(typeof(long), SerializeLongValue);
+            _registeredSerializers.Add(typeof(double), SerializeDoubleValue);
             _registeredSerializers.Add(typeof(DateTime), (dateObject) => 
             {
                 DateTime date = (DateTime)dateObject;
@@ -22,6 +23,7 @@ namespace ConfigLibrary.Bean
             //Register deserializers
             _registeredDeserializers.Add(typeof(int), DeserializeIntValue);
             _registeredDeserializers.Add(typeof(long), DeserializeLongValue);
+            _registeredDeserializers.Add(typeof(double), DeserializeDoubleValue);
             _registeredDeserializers.Add(typeof(DateTime), (binaryList) =>
             {
                 return DateTime.FromBinary((long)DeserializeLongValue(binaryList));
@@ -65,7 +67,7 @@ namespace ConfigLibrary.Bean
 
 
         //Deserialize all public fields and properties of some type
-        internal static void DeserializeData<T>(List<byte> binaryList, ref T dataObject)
+        internal static void DeserializeData<T>(List<byte> binaryList, T dataObject) where T: class
         {
             Type dataType = typeof(T);
             Func<List<byte>, object> deserializeFunction;
@@ -149,6 +151,34 @@ namespace ConfigLibrary.Bean
             binaryData.RemoveRange(0, sizeof(int));
             return BitConverter.ToInt32(dataArray.ToArray(), 0);
         }
+
+
+        //Serialize int value
+        internal static List<byte> SerializeDoubleValue(object data)
+        {
+            double dataValue = (double)data;
+            List<byte> dataArray = new List<byte>(BitConverter.GetBytes(dataValue));
+            if (!BitConverter.IsLittleEndian)
+            {
+                dataArray.Reverse();
+            }
+            return dataArray;
+        }
+
+
+        //Deserialize double value
+        //Remove data from the list (ref pointer)
+        internal static object DeserializeDoubleValue(List<byte> binaryData)
+        {
+            List<byte> dataArray = binaryData.GetRange(0, sizeof(double));
+            if (!BitConverter.IsLittleEndian)
+            {
+                dataArray.Reverse();
+            }
+            binaryData.RemoveRange(0, sizeof(double));
+            return BitConverter.ToDouble(dataArray.ToArray(), 0);
+        }
+
 
 
         private static Dictionary<Type, Func<object, List<byte>>> _registeredSerializers = new Dictionary<Type, Func<object, List<byte>>>();

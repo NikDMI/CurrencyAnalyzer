@@ -5,10 +5,14 @@ using System.Text;
 namespace ConfigLibrary.Bean
 {
     ///This struct is used in the begining of packets to indicate packet type
-    public struct PacketInfo : IConvertable
+    public class PacketInfo : IConvertable
     {
-        public enum PacketType: int { ERROR };
+        public enum PacketType: int { ERROR, GET_RATES, RESPONSE_RATES };
 
+        public PacketInfo(PacketType packetType)
+        {
+            _packetType = packetType;
+        }
 
         public int Type
         {
@@ -34,7 +38,7 @@ namespace ConfigLibrary.Bean
         //Fill structure from serialized bytes
         public void DeserializeData(List<byte> data)
         {
-            BinaryConverter.DeserializeData<PacketInfo>(data, ref this);
+            BinaryConverter.DeserializeData<PacketInfo>(data, this);
         }
 
 
