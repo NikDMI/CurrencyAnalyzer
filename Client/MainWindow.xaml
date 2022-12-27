@@ -12,10 +12,10 @@
     <Grid>
         <StackPanel Orientation="Vertical">
             <StackPanel Height="50" Orientation="Horizontal">
-                <TextBox Text="TextBox" TextWrapping="Wrap" Width="115" Margin="10,10,10,10" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
+                <TextBox Text="01.12.22" TextWrapping="Wrap" Width="115" Margin="10,10,10,10" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
                          TextChanged="TextBox_ValidateInput" x:Name="_textBoxDateFrom"/>
                 <Label Content="-" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Margin="10,0,10,0"/>
-                <TextBox Text="TextBox" TextWrapping="Wrap" Width="115" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Margin="10,10,10,10"
+                <TextBox Text="20.12.22" TextWrapping="Wrap" Width="115" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Margin="10,10,10,10"
                          TextChanged="TextBox_ValidateInput" x:Name="_textBoxDateTo"/>
                 <Label Content="Валюта:" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Padding="5,5,5,5" Margin="10,0,0,0"/>
                 <ComboBox x:Name="_currencyComboBox" Width="120" Margin="10,10,10,10">
