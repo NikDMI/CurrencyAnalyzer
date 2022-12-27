@@ -99,17 +99,20 @@ namespace Server.Cache.CacheUploader
             {
                 Currency = currencyRate.CurrencyTypeTo.ToString();
                 Date = currencyRate.RateDate.ToString("dd/M/yy");
-                Value = Math.Truncate(currencyRate.CurrencyCountFrom * 100) / 100;
-                Amount = (byte)currencyRate.CurrencyAmountTo;
+                Value = Math.Truncate(currencyRate.CurrencyAmountTo * 100) / 100;
+                Amount = (byte)currencyRate.CurrencyCountFrom;
             }
 
+
+            //Conver one model to another
             public CurrencyRate ConvertToCurrencyRate()
             {
                 CurrencyRate rate = new CurrencyRate();
                 rate.CurrencyTypeFrom = ConfigLibrary.Bean.CurrencyType.BYN;
                 rate.CurrencyTypeTo = (ConfigLibrary.Bean.CurrencyType)Enum.Parse(typeof(ConfigLibrary.Bean.CurrencyType), Currency);
-                rate.CurrencyCountFrom = Value;
-                rate.CurrencyAmountTo = Amount;
+                rate.CurrencyCountFrom = Amount;
+                rate.CurrencyAmountTo = Value;
+                rate.RateDate = DateTime.Parse(Date);
                 return rate;
             }
 

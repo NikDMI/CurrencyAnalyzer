@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using ConfigLibrary.Bean;
+using Server.Cache;
 
 namespace Server.RequestController
 {
     //controlls user requests
-    internal class RequestController
+    internal static class RequestController
     {
         //Parse user request and create response if needed
         public static List<byte> ProcessRequest(byte[] userRequest)
@@ -25,8 +26,16 @@ namespace Server.RequestController
                 binaryResponse.AddRange(packetInfo.SerializeData());
                 return binaryResponse;
             }
+            //Process action according to the request
             ChooseServerAction(packetInfo, binaryUserData);
-            return null;
+            return binaryResponse;
+        }
+
+
+        //This class is used to finish all server work
+        public static void FinalizeWork()
+        {
+            _cache.Dispose();
         }
 
 
@@ -38,5 +47,8 @@ namespace Server.RequestController
                 //case PacketInfo.PacketType.
             }
         }
+
+
+        private static CurrencyCache _cache = new CurrencyCache();
     }
 }

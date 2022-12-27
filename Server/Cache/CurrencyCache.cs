@@ -6,11 +6,12 @@ using Server.Services;
 using System.Linq;
 using System.Collections.Concurrent;
 using Server.Cache.CacheUploader;
+using System.Threading.Tasks;
 
 namespace Server.Cache
 {
     //Represents all currencies rates, that now available to the server
-    internal class CurrencyCache
+    internal class CurrencyCache : IDisposable
     {
 
         public CurrencyCache()
@@ -30,10 +31,7 @@ namespace Server.Cache
             }
             //Load cache from file
             _cacheUploader = CacheUploaderFactory.GetCacheUploader(CacheUploaderFactory.CacheUploadersType.FILE_JSON);
-            List<CurrencyRate> rates = new List<CurrencyRate>();
-            rates.Add(new CurrencyRate { CurrencyAmountTo = 10, CurrencyCountFrom = 200.234234, CurrencyTypeFrom = CurrencyType.BYN, CurrencyTypeTo = CurrencyType.USD, RateDate = new DateTime(2022, 10, 23) });
-            rates.Add(new CurrencyRate { CurrencyAmountTo = 20, CurrencyCountFrom = 100.1314, CurrencyTypeFrom = CurrencyType.BYN, CurrencyTypeTo = CurrencyType.USD, RateDate = new DateTime(2022, 10, 23) });
-            _cacheUploader.AppendCurrencyRates(rates.GetEnumerator());
+            UploadCacheFromDB();
             //Initialize services
             _currencyServices = new Dictionary<CurrencyType, ICurrencyService>();
             _currencyServices.Add(CurrencyType.BYN, CurrencyServiceFactory.GetCurrencyService(CurrencyType.BYN));
@@ -63,14 +61,25 @@ namespace Server.Cache
                                  select rate;
             requeredRates.AddRange(availableRates);
             //Get not saved rates throught the API services
-            RequareNotLoadedRates(requeredRates, currencyRates, currencyTo, timeFrom, timeTo, maxRequestCount, currencyService);
+            RequireNotLoadedRates(requeredRates, currencyRates, currencyTo, timeFrom, timeTo, maxRequestCount, currencyService);
             return requeredRates;
             
         }
 
 
+        //Save all changes to file
+        public void Dispose()
+        {
+            lock (_cacheUploader)
+            {
+
+            }
+        }
+
+
+
         //Requare up to maxRequestCount new records from services 
-        private void RequareNotLoadedRates(List<CurrencyRate> requeredRates, ConcurrentBag<CurrencyRate> currencyRates, CurrencyType currencyTo,
+        private void RequireNotLoadedRates(List<CurrencyRate> requeredRates, ConcurrentBag<CurrencyRate> currencyRates, CurrencyType currencyTo,
             DateTime timeFrom, DateTime timeTo, int maxRequestCount, ICurrencyService currencyService)
         {
             int requestRatesCount = (timeTo - timeFrom).Days + 1;
@@ -112,6 +121,26 @@ namespace Server.Cache
                 //Add loaded rates to list and cache
                 requeredRates.AddRange(newCurrencyRates);
                 newCurrencyRates.ForEach(rate => currencyRates.Add(rate));//переделать с учетом вариата, когда два потока добавляют одни и те же записи
+                //Upload cache file
+                Task.Run(() => 
+                {
+                    lock (_cacheUploader)
+                    {
+                        _cacheUploader.AppendCurrencyRates(newCurrencyRates.GetEnumerator());
+                    }
+                });
+            }
+        }
+
+
+        private void UploadCacheFromDB()
+        {
+            IEnumerator<CurrencyRate> loadedRates = _cacheUploader.LoadCache();
+            Dictionary<CurrencyType, ConcurrentBag<CurrencyRate>> assosiatedRates = _currenciesRates[CurrencyType.BYN];
+            while (loadedRates.MoveNext())
+            {
+                //Now all rates in cache according to BYN
+                assosiatedRates[loadedRates.Current.CurrencyTypeTo].Add(loadedRates.Current);
             }
         }
 
@@ -125,4 +154,5 @@ namespace Server.Cache
         private ICacheUploader _cacheUploader;
 
     }
+
 }

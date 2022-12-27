@@ -9,6 +9,7 @@ namespace ConfigLibrary.Bean
     {
         public enum PacketType: int { ERROR };
 
+
         public int Type
         {
             get

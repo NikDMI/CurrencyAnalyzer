@@ -13,14 +13,6 @@ namespace Server
     {
         public static void Main(String[] args)
         {
-            CurrencyCache c = new CurrencyCache();
-            var res = c.GetAvailableCurrencyRates(ConfigLibrary.Bean.CurrencyType.BYN, ConfigLibrary.Bean.CurrencyType.USD, new DateTime(2022, 11, 1),
-                new DateTime(2022, 11, 5), 10);
-            res = c.GetAvailableCurrencyRates(ConfigLibrary.Bean.CurrencyType.BYN, ConfigLibrary.Bean.CurrencyType.USD, new DateTime(2022, 11, 10),
-                new DateTime(2022, 11, 15), 10);
-            res = c.GetAvailableCurrencyRates(ConfigLibrary.Bean.CurrencyType.BYN, ConfigLibrary.Bean.CurrencyType.USD, new DateTime(2022, 11, 1),
-                new DateTime(2022, 11, 15), 10);
-
             //Get configs of the application
             IConfig configs = ConfigFactory.GetConfig(ConfigFactory.ConfigType.ASSEMBLY_MEMORY);
             try
@@ -39,6 +31,7 @@ namespace Server
             }
             Console.Read();
             _server.StopServer();
+            RequestController.RequestController.FinalizeWork(); //Free resourses
             Console.WriteLine("Server was stopped");
         }
 

@@ -13,6 +13,8 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using ConfigLibrary;
+using Syncfusion.UI.Xaml.Charts;
+
 
 namespace Client
 {

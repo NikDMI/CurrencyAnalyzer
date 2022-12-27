@@ -55,8 +55,11 @@ namespace Server.Servers
                 {
                     lock (_serverAwaitEvent)
                     {
-                        _serverAwaitEvent.Set();    //signals server thread
+                        _serverAwaitEvent.Set();    //signals server thread to get next context
                     }
+                    //Get user requirest
+                    var httpContext = httpContextTask.Result;
+                    ProcessClientRequest(httpContext);  //Process request asyncronious
                 });
 
                 _serverAwaitEvent.WaitOne();    //Sleep until client doesn't send a requirest or admin can't stop the server
@@ -65,10 +68,6 @@ namespace Server.Servers
                 {
                     return;
                 }
-                //Get user requirest
-                var httpContext = httpContextTask.Result;
-                Task.Run(() => this.ProcessClientRequest(httpContext));
-                //ProcessClientRequest(httpContext);
             }
         }
 
@@ -84,6 +83,7 @@ namespace Server.Servers
             var dataSize = httpContext.Request.ContentLength64;
             byte[] requestData = new byte[dataSize];
             requestStream.Read(requestData, 0, (int)dataSize);
+            //Process request
             List<byte> responseData = Server.RequestController.RequestController.ProcessRequest(requestData);
             //Send response
             httpContext.Response.KeepAlive = false;
